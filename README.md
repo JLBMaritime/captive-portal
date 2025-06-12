@@ -23,6 +23,16 @@ This solution creates a captive portal that allows end users to configure their 
 - NetworkManager
 - Wi-Fi hardware capability
 
+### Required Packages
+
+The installation script will automatically install the following packages:
+- python3
+- python3-flask
+- network-manager
+- dnsmasq
+- hostapd
+- iptables-persistent
+
 ## Installation
 
 ### Prerequisites

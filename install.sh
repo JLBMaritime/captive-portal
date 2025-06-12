@@ -26,7 +26,7 @@ install_packages() {
     apt-get install -y python3 python3-pip network-manager dnsmasq hostapd iptables-persistent
     
     print_message "Installing required Python packages..."
-    pip3 install flask
+    apt-get install -y python3-flask
 }
 
 # Function to create directory structure
