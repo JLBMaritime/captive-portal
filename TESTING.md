@@ -99,6 +99,11 @@ This will display real-time logs that can help diagnose any issues.
    - Ensure the installation completed without errors
    - Check that the Wi-Fi adapter is working: `rfkill list`
    - Restart the NetworkManager service: `sudo systemctl restart NetworkManager`
+   - If logs show `ERROR - Error setting up AP mode`, try manually creating and activating the access point:
+     ```bash
+     sudo nmcli connection add type wifi ifname "*" con-name "JLBMaritime" autoconnect yes ssid "JLBMaritime" mode ap ipv4.method shared ipv4.addresses "10.42.0.1/24" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "Admin"
+     sudo nmcli connection up JLBMaritime
+     ```
 
 2. **Cannot Connect to JLBMaritime Network**
    - Verify you're using the correct password ("Admin")
