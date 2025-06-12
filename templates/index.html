@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLBMaritime Wi-Fi Setup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img id="logo" src="{{ url_for('static', filename='logo/jlb_logo.png') }}" alt="JLBMaritime Logo">
+        </div>
+        <h1>JLBMaritime</h1>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Wi-Fi Networks</h2>
+            <button id="scan-button" class="action-button">Scan for Networks</button>
+            
+            <div id="network-list" class="mt-10">
+                <div class="loading">Scanning for networks...</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Connect Modal -->
+    <div id="connect-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Connect to Network</h2>
+            
+            <form id="connect-form">
+                <div class="form-group">
+                    <label for="ssid-input">Network Name:</label>
+                    <input type="text" id="ssid-input" readonly>
+                </div>
+                
+                <div id="password-container" class="form-group">
+                    <label for="password-input">Password:</label>
+                    <input type="password" id="password-input">
+                    
+                    <div class="show-password-toggle">
+                        <input type="checkbox" id="show-password">
+                        <label for="show-password">Show password</label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="action-button mt-10">Connect</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

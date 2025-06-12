@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JLBMaritime - Connection Successful</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img id="logo" src="{{ url_for('static', filename='logo/jlb_logo.png') }}" alt="JLBMaritime Logo">
+        </div>
+        <h1>JLBMaritime</h1>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Connection Successful</h2>
+            
+            <div class="text-center mb-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--success-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+            </div>
+            
+            <p class="text-center">
+                Your AIS receiver is now connected to <strong>{{ ssid }}</strong>
+            </p>
+            
+            <div class="connection-info">
+                <div class="connection-label">Status:</div>
+                <div class="connection-value">Connected</div>
+                
+                <div class="connection-label">IP Address:</div>
+                <div class="connection-value">{{ ip_address }}</div>
+                
+                <div class="connection-label">Signal Strength:</div>
+                <div class="connection-value">{{ signal_strength }}%</div>
+            </div>
+            
+            <p class="mt-10">
+                Your AIS receiver will automatically reconnect to this network whenever it's available. You may now close this window.
+            </p>
+        </div>
+    </main>
+</body>
+</html>
