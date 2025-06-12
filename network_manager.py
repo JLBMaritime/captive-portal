@@ -266,6 +266,21 @@ class NetworkManager:
         try:
             logger.info("Setting up Access Point mode")
             
+            # Get the wireless interface name
+            cmd = ["ip", "-o", "link", "show"]
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            wireless_iface = None
+            
+            for line in result.stdout.splitlines():
+                if "wlan" in line or "wlp" in line or "wls" in line:
+                    wireless_iface = line.split(":")[1].strip().split(" ")[0]
+                    logger.info(f"Found wireless interface: {wireless_iface}")
+                    break
+                    
+            if not wireless_iface:
+                logger.error("No wireless interface found")
+                return False
+                
             # Check if JLBMaritime connection already exists
             cmd = ["nmcli", "-t", "-f", "NAME", "connection", "show"]
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
@@ -276,18 +291,30 @@ class NetworkManager:
                     ap_exists = True
                     break
             
+            # If connection exists but activation fails, delete and recreate it
             if ap_exists:
                 logger.info("JLBMaritime AP connection already exists, activating it")
-                cmd = ["nmcli", "connection", "up", "JLBMaritime"]
-                subprocess.run(cmd, check=True)
-            else:
+                try:
+                    cmd = ["nmcli", "connection", "up", "JLBMaritime"]
+                    subprocess.run(cmd, capture_output=True, text=True, check=True)
+                    logger.info("Successfully activated JLBMaritime AP")
+                except subprocess.CalledProcessError as e:
+                    logger.warning(f"Failed to activate existing AP connection: {e}")
+                    logger.warning("Deleting and recreating the connection")
+                    
+                    # Delete the existing connection
+                    cmd = ["nmcli", "connection", "delete", "JLBMaritime"]
+                    subprocess.run(cmd, check=True)
+                    ap_exists = False
+            
+            if not ap_exists:
                 logger.info("Creating JLBMaritime AP connection")
                 
-                # Create a new AP connection
+                # Create a new AP connection with the detected interface
                 cmd = [
                     "nmcli", "connection", "add",
                     "type", "wifi",
-                    "ifname", "*",
+                    "ifname", wireless_iface,
                     "con-name", "JLBMaritime",
                     "autoconnect", "yes",
                     "ssid", "JLBMaritime",
@@ -308,7 +335,25 @@ class NetworkManager:
             
         except subprocess.CalledProcessError as e:
             logger.error(f"Error setting up AP mode: {e}")
-            logger.error(f"Error output: {e.stderr}")
+            if e.stderr:
+                logger.error(f"Error output: {e.stderr}")
+            else:
+                logger.error(f"No error output available")
+                
+            # Additional diagnostics
+            try:
+                logger.info("Checking NetworkManager status...")
+                cmd = ["systemctl", "status", "NetworkManager"]
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                logger.info(f"NetworkManager status: {result.stdout}")
+                
+                logger.info("Checking available connections...")
+                cmd = ["nmcli", "connection", "show"]
+                result = subprocess.run(cmd, capture_output=True, text=True)
+                logger.info(f"Available connections: {result.stdout}")
+            except Exception as diag_e:
+                logger.error(f"Error during diagnostics: {diag_e}")
+                
             return False
         except Exception as e:
             logger.error(f"Unexpected error setting up AP mode: {e}")

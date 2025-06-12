@@ -98,12 +98,32 @@ This will display real-time logs that can help diagnose any issues.
 1. **No JLBMaritime Network Appears**
    - Ensure the installation completed without errors
    - Check that the Wi-Fi adapter is working: `rfkill list`
+   - Verify the Wi-Fi adapter is not blocked: `sudo rfkill unblock wifi`
+   - Check which wireless interfaces are available: `ip link show | grep -i wlan`
    - Restart the NetworkManager service: `sudo systemctl restart NetworkManager`
-   - If logs show `ERROR - Error setting up AP mode`, try manually creating and activating the access point:
+   - If logs show `ERROR - Error setting up AP mode`, try the following:
      ```bash
-     sudo nmcli connection add type wifi ifname "*" con-name "JLBMaritime" autoconnect yes ssid "JLBMaritime" mode ap ipv4.method shared ipv4.addresses "10.42.0.1/24" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "Admin"
+     # Check if the AP connection exists
+     sudo nmcli connection show | grep JLBMaritime
+     
+     # If it exists, try deleting it and recreating
+     sudo nmcli connection delete JLBMaritime
+     
+     # Find your wireless interface name
+     sudo ip link show | grep wlan
+     
+     # Create the AP with the specific interface name (replace wlan0 with your interface)
+     sudo nmcli connection add type wifi ifname wlan0 con-name "JLBMaritime" autoconnect yes ssid "JLBMaritime" mode ap ipv4.method shared ipv4.addresses "10.42.0.1/24" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "Admin"
+     
+     # Activate the connection
      sudo nmcli connection up JLBMaritime
      ```
+     
+   - Check if your wireless adapter supports AP mode:
+     ```bash
+     sudo iw list | grep -A 10 "Supported interface modes"
+     ```
+     Look for "AP" in the list of supported modes.
 
 2. **Cannot Connect to JLBMaritime Network**
    - Verify you're using the correct password ("Admin")
