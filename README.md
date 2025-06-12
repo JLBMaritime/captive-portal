@@ -25,12 +25,74 @@ This solution creates a captive portal that allows end users to configure their 
 
 ## Installation
 
-1. Clone this repository or copy all files to the Raspberry Pi
-2. Ensure you have the JLBMaritime logo file (jlb_logo.png) in the static/logo directory
-3. Run the installation script as root:
+### Prerequisites
+
+Before installing the captive portal, you need to set up your Raspberry Pi:
+
+1. Install Raspberry Pi OS Bookworm (64-bit) on your Raspberry Pi 4B 2GB
+2. Ensure the username is set to "JLBMaritime" and hostname to "AIS" during OS installation
+3. Connect to the internet to install required packages
+
+### Installing Git
+
+First, install Git on your Raspberry Pi:
 
 ```bash
+# Update package lists
+sudo apt update
+
+# Install Git
+sudo apt install -y git
+
+# Verify installation
+git --version
+```
+
+### Installing the Captive Portal
+
+#### Option 1: Using Git (Recommended)
+
+1. Clone the repository:
+```bash
+# Navigate to a suitable directory
+cd ~
+
+# Clone the repository (replace with your actual repository URL)
+git clone https://github.com/JLBMaritime/captive-portal.git
+
+# Navigate to the project directory
+cd captive-portal
+```
+
+2. Ensure you have the JLBMaritime logo file (jlb_logo.png) in the static/logo directory
+
+3. Run the installation script as root:
+```bash
 sudo ./install.sh
+```
+
+4. Reboot the Raspberry Pi:
+```bash
+sudo reboot
+```
+
+#### Option 2: Manual Installation
+
+If you received the files via other means (USB drive, etc.):
+
+1. Copy all files to a directory on the Raspberry Pi
+2. Ensure you have the JLBMaritime logo file (jlb_logo.png) in the static/logo directory
+3. Make the installation script executable:
+```bash
+chmod +x install.sh
+```
+4. Run the installation script as root:
+```bash
+sudo ./install.sh
+```
+5. Reboot the Raspberry Pi:
+```bash
+sudo reboot
 ```
 
 The installation script will:
