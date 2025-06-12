@@ -23,7 +23,7 @@ install_packages() {
     apt-get update
 
     print_message "Installing required packages..."
-    apt-get install -y python3 python3-pip network-manager dnsmasq hostapd iptables-persistent
+    apt-get install -y python3 python3-pip network-manager dnsmasq hostapd iptables-persistent uuid-runtime
     
     print_message "Installing required Python packages..."
     apt-get install -y python3-flask

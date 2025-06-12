@@ -159,6 +159,8 @@ To connect an AIS receiver/server to a Wi-Fi network:
 - **Connection fails**: Verify the Wi-Fi password is correct. Try moving closer to your Wi-Fi router to improve signal strength.
 - **Device doesn't reconnect after power loss**: The device attempts to reconnect to known networks in order of last connection. Ensure your network is available and has a strong signal.
 
+For detailed testing instructions and troubleshooting guidance, please refer to the [TESTING.md](TESTING.md) file.
+
 ## Logs
 
 Logs are stored in `/var/log/captive-portal.log` and can be viewed with:
